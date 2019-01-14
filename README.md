@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/nikolay/cody-bot.svg?branch=master)](https://travis-ci.org/nikolay/cody-bot)
 
-[![Deploy to now](https://deploy.now.sh/static/button.svg)](https://deploy.now.sh/?repo=https://github.com/nikolay/cody-bot)
+[![Deploy to now](https://deploy.now.sh/static/button.svg)](https://deploy.now.sh/?repo=https://github.com/nikolayay/cody-bot)
 
 ## Usage
 
