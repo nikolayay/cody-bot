@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "env": {
+    "BOT_TOKEN": "512012460:AAF9LalmHb43rhh0nXt9C43KE5yKTEklU3U"
+  },
+  "builds": [{ "src": "*.js", "use": "@now/node-server" }],
+  "routes": [{ "src": "/(.*)", "dest": "index.js" }]
+}
