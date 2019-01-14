@@ -5,7 +5,9 @@ const bot = new Composer();
 bot.use(log());
 bot.use(session());
 
-bot.start(({ reply }) => reply("Welcome message"));
+bot.start(({ reply }) =>
+  reply("Brand new and changed and reformed welcome message weee-haa")
+);
 bot.help(({ reply }) => reply("Help message"));
 bot.settings(({ reply }) => reply("Bot settings"));
 
