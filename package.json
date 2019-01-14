@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "dev": "BOT_TOKEN='512012460:AAF9LalmHb43rhh0nXt9C43KE5yKTEklU3U' supervisor -x micro-bot index.js",
+    "dev": "nodemon --exec 'micro-bot -e '.env.dev''",
     "start": "micro-bot",
     "now-start": "micro-bot -d ${NOW_URL}",
     "lint": "eslint .",
