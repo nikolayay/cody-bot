@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec 'micro-bot -e '.env.dev''",
+    "dev": "nodemon --exec 'micro-bot -e '.env''",
     "start": "micro-bot",
     "now-start": "micro-bot -d ${NOW_URL}",
     "lint": "eslint .",
