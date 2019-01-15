@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec 'micro-bot -e '.env''",
+    "dev": "nodemon --exec 'micro-bot -e '.env.dev''",
     "start": "micro-bot",
     "now-start": "micro-bot -d ${NOW_URL}",
     "lint": "eslint .",
@@ -20,6 +20,9 @@
   "author": "nikolay <alexandroff.nikolay05@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.18.0",
+    "client-oauth2": "^4.2.3",
+    "express": "^4.16.4",
     "micro-bot": "^2.5.1"
   },
   "devDependencies": {
