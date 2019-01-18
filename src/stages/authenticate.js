@@ -1,7 +1,7 @@
+const Scene = require("telegraf/scenes/base");
+
 const auth = require("../lib/auth");
 const api = require("../api");
-
-const Scene = require("telegraf/scenes/base");
 
 // Auth scene
 const authenticate = new Scene("authenticate");
@@ -29,10 +29,11 @@ authenticate.hears(/sec_[A-Za-z0-9\-\._~\+\/]+=*/gm, async ctx => {
     // Update API object
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-    const res = await api.get("users/current/projects");
-    ctx.reply(res.data);
+    // add token to state
+    ctx.session.token = token;
+
+    ctx.scene.leave();
   } catch (error) {
-    // const msg = error.data.payload.error_description;
     ctx.reply(`Error: ${error}`);
   }
 });
