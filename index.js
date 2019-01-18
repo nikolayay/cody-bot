@@ -1,45 +1,64 @@
 const { Composer, log, session } = require("micro-bot");
-const Markup = require("telegraf/markup");
-const Extra = require("telegraf/extra");
-const ClientOAuth2 = require("client-oauth2");
+const Stage = require("telegraf/stage");
+const Scene = require("telegraf/scenes/base");
+const { leave } = Stage;
 const axios = require("axios");
-const express = require("express");
 
-const service = new ClientOAuth2({
-  clientId: "U7U0H0CcMkqsfyb9GW1OJ8lS",
-  clientSecret:
-    "sec_4no1vwTuIvXbbxJfC2mZy5yRXf26QtA3v7PY12WhdTiwEOkqfBQtf5OJSrG42rGDoNPr3X2RygKNpN6p",
-  accessTokenUri: "https://wakatime.com/oauth/token",
-  authorizationUri: "https://wakatime.com/oauth/authorize",
-  redirectUri: "https://wakatime.com/oauth/test",
-  scopes: "email, read_stats"
+const api = axios.create({
+  baseURL: "https://wakatime.com/api/v1/"
 });
+
+const auth = require("./lib/auth");
 
 const bot = new Composer();
-
-bot.use((ctx, next) => {
-  ctx.reply(ctx.contextState);
-  next();
-});
 
 bot.use(log());
 bot.use(session());
 
-bot.start(({ reply }) => reply("Welcome"));
-bot.help(({ reply }) => reply("Help message"));
-bot.settings(({ reply }) => reply("Bot settings"));
+// Greeter scene
+const greeter = new Scene("greeter");
+greeter.enter(ctx =>
+  ctx.reply(
+    `Welcome! Register by following the link. Paste the code in the response. ${
+      auth.authorizationUri
+    }`
+  )
+);
+greeter.leave(ctx => ctx.reply("Authenticated sucessfully!"));
+greeter.hears(/sec_[A-Za-z0-9\-\._~\+\/]+=*/gm, async ctx => {
+  ctx.reply("Code recieved. Logging you in...");
 
-const keyboard = Markup.inlineKeyboard([
-  Markup.urlButton("Authorize 🔒", service.code.getUri())
-]);
+  // Log the person in here
+  const code = ctx.update.message.text;
 
-// connection flow
-bot.command("authorize", ctx => {
-  const msg =
-    "Please authorise Cody with WakaTime, you have to be logged in. Run /connect when you get the code.";
-  ctx.telegram.sendMessage(ctx.from.id, msg, Extra.markup(keyboard));
+  try {
+    const result = await auth.oauth2.authorizationCode.getToken(
+      auth.tokenConfig(code)
+    );
+    const accessToken = auth.oauth2.accessToken.create(result);
+    const token = accessToken.token.access_token;
+
+    // Update API object
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const res = await api.get("users/current/projects");
+    ctx.reply(res.data);
+  } catch (error) {
+    // const msg = error.data.payload.error_description;
+    ctx.reply(`Error: ${error}`);
+  }
 });
+greeter.on("message", ctx => ctx.reply("Paste the code in the response."));
 
-bot.command("date", ({ reply }) => reply(`Server time: ${Date()}`));
+// Create scene manager
+const stage = new Stage();
+stage.command("cancel", leave());
+
+bot.use(stage.middleware());
+
+// Scene registration
+stage.register(greeter);
+
+bot.start(ctx => ctx.scene.enter("greeter"));
 
 module.exports = bot;
