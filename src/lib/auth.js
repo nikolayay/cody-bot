@@ -12,7 +12,7 @@ const credentials = {
     authorizationMethod: "body"
   }
 };
-const scope = "email, read_stats, read_logged_time";
+const scope = "email, read_stats, read_logged_time, read_stats";
 const redirect_uri = "https://wakatime.com/oauth/test";
 
 // Create auth object

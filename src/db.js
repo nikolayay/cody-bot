@@ -14,6 +14,4 @@ mongoose.connect(
   { useNewUrlParser: true }
 );
 
-var db = mongoose.connection;
-
 module.exports = User;
