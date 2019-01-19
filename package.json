@@ -24,6 +24,7 @@
     "client-oauth2": "^4.2.3",
     "express": "^4.16.4",
     "micro-bot": "^2.5.1",
+    "mongoose": "^5.4.5",
     "simple-oauth2": "^2.2.1"
   },
   "devDependencies": {

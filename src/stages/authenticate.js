@@ -2,6 +2,7 @@ const Scene = require("telegraf/scenes/base");
 
 const auth = require("../lib/auth");
 const api = require("../api");
+const User = require("../db");
 
 // Auth scene
 const authenticate = new Scene("authenticate");
@@ -31,6 +32,18 @@ authenticate.hears(/sec_[A-Za-z0-9\-\._~\+\/]+=*/gm, async ctx => {
 
     // add token to state
     ctx.session.token = token;
+
+    //create new user in db
+    const telegramID = ctx.message.from.id;
+
+    let user = new User({ token, telegramID });
+
+    user.save(function(err) {
+      if (err) {
+        return next(err);
+      }
+      console.log("USER CREATED");
+    });
 
     ctx.scene.leave();
   } catch (error) {

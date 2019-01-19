@@ -1,6 +1,7 @@
 const { Composer, log, session } = require("micro-bot");
 const Stage = require("telegraf/stage");
 const { leave } = Stage;
+const User = require("./src/db");
 
 const api = require("./src/api");
 const authenticate = require("./src/stages/authenticate");
@@ -18,14 +19,25 @@ bot.use(stage.middleware());
 
 // auth middleware
 bot.use((ctx, next) => {
+  const telegramID = ctx.message.from.id;
+  User.findOne({ telegramID }, (err, user) => {
+    if (user) {
+      ctx.session.token = user.token;
+    } else {
+      // authenticate if fails
+      ctx.scene.enter("authenticate");
+    }
+  });
+
   if (ctx.session.token) {
+    // Update API object
+    api.defaults.headers.common["Authorization"] = `Bearer ${
+      ctx.session.token
+    }`;
     return next();
   }
-  // attempt to get from database
-
-  // authenticate if fails
-  ctx.scene.enter("authenticate");
 });
+
 // Scene registration
 stage.register(authenticate);
 
