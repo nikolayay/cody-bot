@@ -2,7 +2,7 @@ const Scene = require("telegraf/scenes/base");
 
 const auth = require("../lib/auth");
 const api = require("../api");
-const User = require("../db");
+const { User } = require("../db");
 
 // Auth scene
 const authenticate = new Scene("authenticate");
