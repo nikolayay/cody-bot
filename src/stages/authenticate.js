@@ -35,8 +35,9 @@ authenticate.hears(/sec_[A-Za-z0-9\-\._~\+\/]+=*/gm, async ctx => {
 
     //create new user in db
     const telegramID = ctx.message.from.id;
+    const chatID = ctx.chat.id;
 
-    let user = new User({ token, telegramID });
+    let user = new User({ token, telegramID, chatID });
 
     user.save(function(err) {
       if (err) {

@@ -4,7 +4,8 @@ var Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   token: String,
-  telegramID: String
+  telegramID: String,
+  chatID: String
 });
 
 var User = mongoose.model("User", userSchema);
