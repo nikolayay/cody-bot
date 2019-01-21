@@ -61,7 +61,7 @@ bot.use((ctx, next) => {
 bot.start(ctx => ctx.scene.enter("authenticate"));
 
 // CRON - every monday at 8am
-schedule.scheduleJob({ hour: 8, minute: 15, dayOfWeek: 1 }, function() {
+schedule.scheduleJob({ hour: 8, minute: 30, dayOfWeek: 1 }, function() {
   User.find({}, (err, data) => {
     data.map(async ({ telegramID, token }) => {
       // reset the token
